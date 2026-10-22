@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+
+# Build output
+dist/
+build/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Data: never commit real or raw datasets
+analytics/data/raw/*
+analytics/data/clean/*
+!analytics/data/raw/.gitkeep
+!analytics/data/clean/.gitkeep
+
+# Power BI files may embed real data
+*.pbix
+!powerbi/sample-*.pbix
