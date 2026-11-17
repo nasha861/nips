@@ -1,5 +1,6 @@
 import { ErrorRequestHandler, RequestHandler } from "express";
 import { ZodError } from "zod";
+import { logger } from "../utils/logger";
 import { ApiError } from "../utils/ApiError";
 import { env } from "../config/env";
 
@@ -29,7 +30,7 @@ export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
     return;
   }
 
-  console.error("Unexpected error:", err);
+  logger.error({ err }, "Unexpected error");
   res.status(500).json({
     success: false,
     message:
