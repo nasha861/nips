@@ -1,17 +1,15 @@
-import app from "./app";
 import { env } from "./config/env";
 import { connectDB } from "./config/db";
+import app from "./app";
 
-async function start(): Promise<void> {
-  try {
-    await connectDB();
-    app.listen(env.PORT, () => {
-      console.log(`NIPS API running on port ${env.PORT} (${env.NODE_ENV})`);
-    });
-  } catch (error) {
-    console.error("Failed to start server:", error);
-    process.exit(1);
-  }
-}
+const start = async (): Promise<void> => {
+  await connectDB();
+  app.listen(env.PORT, () => {
+    console.log(`NIPS API running on port ${env.PORT}`);
+  });
+};
 
-void start();
+start().catch((err: unknown) => {
+  console.error("Failed to start server:", err);
+  process.exit(1);
+});

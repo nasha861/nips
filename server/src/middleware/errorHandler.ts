@@ -1,4 +1,5 @@
 import { ErrorRequestHandler, RequestHandler } from "express";
+import { ZodError } from "zod";
 import { ApiError } from "../utils/ApiError";
 import { env } from "../config/env";
 
@@ -7,17 +8,35 @@ export const notFound: RequestHandler = (req, _res, next) => {
 };
 
 export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
-  const isApiError = err instanceof ApiError;
-  const statusCode = isApiError ? err.statusCode : 500;
-  const message = isApiError ? err.message : "Internal server error";
-
-  if (!isApiError) {
-    console.error(err); // full details go to the log, never to the client
+  if (err instanceof ApiError) {
+    res.status(err.statusCode).json({
+      success: false,
+      message: err.message,
+      ...(err.details !== undefined && { errors: err.details }),
+    });
+    return;
   }
 
-  res.status(statusCode).json({
-    status: "error",
-    message,
-    ...(env.NODE_ENV === "development" && !isApiError ? { stack: err.stack } : {}),
+  if (err instanceof ZodError) {
+    res.status(400).json({
+      success: false,
+      message: "Validation failed",
+      errors: err.issues.map((i) => ({
+        field: i.path.join("."),
+        message: i.message,
+      })),
+    });
+    return;
+  }
+
+  console.error("Unexpected error:", err);
+  res.status(500).json({
+    success: false,
+    message:
+      env.NODE_ENV === "production"
+        ? "Internal server error"
+        : err instanceof Error
+        ? err.message
+        : "Internal server error",
   });
 };
