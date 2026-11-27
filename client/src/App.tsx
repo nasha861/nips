@@ -3,9 +3,7 @@ import { getJson } from "./services/api";
 import type { HealthResponse } from "./types/health";
 
 type HealthState =
-  | { kind: "loading" }
-  | { kind: "ok"; data: HealthResponse }
-  | { kind: "error"; message: string };
+  { kind: "loading" } | { kind: "ok"; data: HealthResponse } | { kind: "error"; message: string };
 
 function App() {
   const [health, setHealth] = useState<HealthState>({ kind: "loading" });
@@ -32,8 +30,8 @@ function App() {
       {health.kind === "loading" && <p>Checking API...</p>}
       {health.kind === "ok" && (
         <p>
-          API status: <strong>{health.data.status}</strong> (
-          {health.data.service}) at {health.data.timestamp}
+          API status: <strong>{health.data.status}</strong> ({health.data.service}) at{" "}
+          {health.data.timestamp}
         </p>
       )}
       {health.kind === "error" && (
