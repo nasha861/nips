@@ -37,7 +37,7 @@ export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
       env.NODE_ENV === "production"
         ? "Internal server error"
         : err instanceof Error
-        ? err.message
-        : "Internal server error",
+          ? err.message
+          : "Internal server error",
   });
 };

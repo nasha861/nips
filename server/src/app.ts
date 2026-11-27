@@ -9,7 +9,7 @@ import { notFound, errorHandler } from "./middleware/errorHandler";
 const app: Application = express();
 
 if (env.NODE_ENV === "production") {
-  app.set ("trust proxy", 1); // we run behind a reverse proxy (e.g., Nginx, Cloudflare, etc.)
+  app.set("trust proxy", 1); // we run behind a reverse proxy (e.g., Nginx, Cloudflare, etc.)
 }
 
 app.use(httpLogger);
